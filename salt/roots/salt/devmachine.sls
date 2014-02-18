@@ -23,53 +23,60 @@ rbenv_deps:
       - bison
       - subversion
 
-/root/.rbenv:
+/home/glen/.rbenv:
   file.directory:
     - makedirs: True
+    - user: glen
 
-https://github.com/sstephenson/rbenv.git:
+rbenv-git:
   git.latest:
+    - name: https://github.com/sstephenson/rbenv.git
     - rev: master
-    - target: /root/.rbenv
+    - target: /home/glen/.rbenv
     - force: True
+    - user: glen
     - require:
       - pkg: rbenv_deps
-      - file: /root/.rbenv
+      - file: /home/glen/.rbenv
 
 https://github.com/sstephenson/ruby-build.git:
   git.latest:
     - rev: master
-    - target: /root/.rbenv/plugins
+    - target: /home/glen/.rbenv/plugins
     - force: True
+    - user: glen
     - require:
-      - git: https://github.com/sstephenson/rbenv.git
-      - file: /root/.rbenv
+      - git: rbenv-git
+      - file: /home/glen/.rbenv
 
-/root/.rbenv/plugins/install.sh:
+/home/glen/.rbenv/plugins/install.sh:
   cmd.run:
   - require:
     - git: https://github.com/sstephenson/ruby-build.git
 
-/root/.bashrc:
+/home/glen/.bashrc:
   file.append:
+    - user: glen
     - text:
       - export PATH="$HOME/.rbenv/bin:$PATH"
       - eval "$(rbenv init -)"
     - require:
       - git: https://github.com/sstephenson/rbenv.git
 
-
-/root/.rbenv/bin/rbenv install 2.1.0:
+/home/glen/.rbenv/bin/rbenv install 2.1.0:
   cmd.run:
-  - require:
-    - git: https://github.com/sstephenson/ruby-build.git
-
-/root/.rbenv/bin/rbenv rehash:
-  cmd.run:
-  - require:
-    - cmd: /root/.rbenv/bin/rbenv install 2.1.0
-
-/root/.rbenv/bin/rbenv global 2.1.0:
-  cmd.run:
+    - user: glen
     - require:
-      - cmd: /root/.rbenv/bin/rbenv rehash
+      - git: https://github.com/sstephenson/ruby-build.git
+
+/home/glen/.rbenv/bin/rbenv rehash:
+  cmd.run:
+    - user: glen
+    - require:
+      - cmd: /home/glen/.rbenv/bin/rbenv install 2.1.0
+
+/home/glen/.rbenv/bin/rbenv global 2.1.0:
+  cmd.run:
+    - user: glen
+    - require:
+      - cmd: /home/glen/.rbenv/bin/rbenv rehash
