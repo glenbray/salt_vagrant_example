@@ -2,4 +2,4 @@ base:
   '*':
     - users
     - users.ssh
-    - devmachine
+    - rbenv_system_wide
